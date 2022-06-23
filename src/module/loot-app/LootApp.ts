@@ -264,7 +264,8 @@ export const extendLootSheet = () => {
             product.data.specific = { value: true };
 
             product.data.level.value = data.finalLevel;
-            product.data.price.value = `${data.finalPrice.basePrice} gp`;
+
+            product.data.price.value.gp = data.finalPrice.basePrice;
 
             product.data.preciousMaterial.value = data.preciousMaterial;
             product.data.preciousMaterialGrade.value = data.preciousMaterialGrade;
@@ -316,12 +317,6 @@ export const extendLootSheet = () => {
                     }
                 }
             }
-
-            console.log("Data object");
-            console.log(data);
-            console.log("Product object");
-            console.log(product);
-
             product.data.hardness = data.hardness;
             product.data.hp.value = data.hitPoints;
             product.data.hp.max = data.hitPoints;
