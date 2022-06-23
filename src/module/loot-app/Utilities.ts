@@ -544,7 +544,11 @@ export function calculateFinalPriceAndLevel(args: FinalPriceAndLevelArgs): Final
     }
     
     let finalLevel = parseInt(args.item.data.level.value.toString());
-    let finalPrice = parsePrice(args.item.data.price.value);
+    /**
+     * // TODO: This just goes by gold value for now. Making it parse down to a string causes the weapon to not be openable or a 
+     * parsable object for Foundry will need factoring to account for other smaller currencies 
+     */
+    let finalPrice = args.item.data.price.value.gp;
     let finalHardness = parseInt(args.item.data.hardness.toString());
     let finalHitPoints = args.item.data.hp.value;
     let finalBreakThreshold = args.item.data.hp.brokenThreshold;
