@@ -16,7 +16,7 @@
 
 import ModuleSettings, { ATTR_RELOAD_REQUIRED } from '../ModuleSettings';
 
-export default class SettingsApp extends FormApplication<FormApplication.Options, any, any> {
+export default class SettingsApp extends FormApplication<FormApplicationOptions, any, any> {
     static get defaultOptions() {
         const options = super.defaultOptions;
         options.title = game.i18n.localize(ModuleSettings.instance.moduleTitle);
@@ -35,7 +35,7 @@ export default class SettingsApp extends FormApplication<FormApplication.Options
         return options;
     }
 
-    constructor(object?: object, options?: FormApplication.Options) {
+    constructor(object?: object, options?: FormApplicationOptions) {
         if (object === undefined) {
             object = {};
         }
