@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
-import { setup } from './Setup';
+import * as gulp from 'gulp';
+import * as tasks from './gulp.tasks';
 
-setup();
+gulp.task('clean', tasks.clean);
+gulp.task('build', tasks.build);
+gulp.task('watch', tasks.watch);
+gulp.task('rebuild', gulp.series(tasks.clean, tasks.build));
+gulp.task('rewatch', gulp.series(tasks.clean, tasks.watch));

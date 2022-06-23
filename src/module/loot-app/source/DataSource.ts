@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { PF2EItem } from "../../../types/PF2E";
-import { IWeighted, IEnabled } from "./Mixins";
+import { IEnabled, IWeighted } from './Mixins';
+import { PF2EItem } from '../../../types/PF2E';
 
 export enum SourceType {
     Table = 'table',
@@ -53,8 +53,8 @@ export interface TableSource extends DataSource {
 export function isTableSource(source: DataSource): source is TableSource {
     return source.sourceType === SourceType.Table;
 }
-export function getTableSourceTable(source: TableSource) {
-    return getFromPackSource(source.tableSource, source.id);
+export async function getTableSourceTable(source: TableSource): Promise<RollTable> {
+    return await getFromPackSource(source.tableSource, source.id);
 }
 
 export interface PackSource extends DataSource {
@@ -66,17 +66,17 @@ export function isPackSource(source: DataSource): source is PackSource {
     return source.sourceType === SourceType.Pack;
 }
 export function getPack(source: PackSource) {
-    return getGame().packs.get(source.id);
+    return game.packs.get(source.id);
 }
-export function getFromPackSource<TResult = PF2EItem>(source: PackSource, documentId: string) {
-    const pack = getGame().packs.get(source.id);
-    console.log("getFromPackSource running");
-    return pack?.getDocument(documentId);
+export async function getFromPackSource<TResult = PF2EItem>(source: PackSource, documentId: string): Promise<TResult> {
+    const pack = game.packs.get(source.id);
+    // @ts-ignore
+    return await pack.getDocument(documentId);
 }
-export function getPackSourceContents(source: PackSource) {
-    const pack = getGame().packs.get(source.id);
-    console.log("getPackSourceContents running");
-    return pack?.getDocuments();
+export async function getPackSourceContents(source: PackSource): Promise<PF2EItem[]> {
+    const pack = game.packs.get(source.id);
+    // @ts-ignore
+    return await pack.getDocuments();
 }
 
 export interface PoolSource extends DataSource {
@@ -103,10 +103,3 @@ export function ordinalNumber(n: number): string {
     const ordinal = suffixes[(index - 20) % 10] || suffixes[index] || suffixes[0];
     return `${n}${ordinal}`;
 }
-
-function getGame(): Game {
-    if(!(game instanceof Game)) {
-      throw new Error('game is not initialized yet!');
-    }
-    return game;
-  }

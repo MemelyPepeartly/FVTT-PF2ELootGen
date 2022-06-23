@@ -14,40 +14,23 @@
  * limitations under the License.
  */
 
-import { permanentSources } from './source/Permanent';
-import { consumableSources } from './source/Consumable';
-import { isTreasureSource, TreasureSource, treasureSources } from './source/Treasure';
-import { scrollTemplateIds, SpellItemType, spellSources, TEMPLATE_PACK_ID, wandTemplateIds } from './source/Spells';
-import { DataSource, GenType, getPack, isPackSource, isPoolSource, isTableSource } from './source/DataSource';
-import { AppFilter, FilterType, spellLevelFilters, spellRarityFilters, spellSchoolFilters, spellTraditionFilters } from './Filters';
-import {
-    ConsumableItem,
-    EquipmentItem,
-    EquipmentType,
-    isArmor,
-    isPhysicalItem,
-    isShield,
-    isSpell,
-    isTreasure,
-    isWeapon,
-    PF2EItem,
-    PhysicalItem,
-    PreciousMaterialGrade,
-    PreciousMaterialType,
-    PriceString,
-    PropertyRuneType,
-    Shield,
-    SpellItem,
-} from '../../types/PF2E';
-import { isWeaponArmorData, ItemMaterials } from './data/Materials';
-import { FundamentalRuneType, ItemRunes, PotencyRuneType } from './data/Runes';
-import { MODULE_NAME, QUICK_MYSTIFY, TOOLBOX_NAME } from '../Constants';
-import { ChatMessageDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatMessageData';
-//import { DiceRollMode } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/constants.mjs';
-import ModuleSettings from '../../../FVTT-Common/src/module/ModuleSettings';
-import { FEATURE_OUTPUT_LOOT_ROLLS, FEATURE_OUTPUT_LOOT_ROLLS_WHISPER } from '../Setup';
 import { DocumentClassForCompendiumMetadata } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/data/collections/compendium';
 import { DICE_ROLL_MODES } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/constants.mjs';
+import { ChatMessageDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatMessageData';
+import { MODULE_NAME, PF2E_LOOT_SHEET_NAME, QUICK_MYSTIFY, TOOLBOX_NAME } from '../Constants';
+import { FEATURE_OUTPUT_LOOT_ROLLS, FEATURE_OUTPUT_LOOT_ROLLS_WHISPER } from '../Setup';
+import ModuleSettings from '../../../FVTT-Common/src/module/ModuleSettings';
+import { PF2EItem, ConsumableItem, isSpell, SpellItem, isTreasure, PhysicalItem, isPhysicalItem, PriceString, EquipmentType, isWeapon, isShield, isArmor, Shield, EquipmentItem, PreciousMaterialType, PreciousMaterialGrade, PropertyRuneType } from '../../types/PF2E';
+import { ItemMaterials, isWeaponArmorData } from './data/Materials';
+import { PotencyRuneType, FundamentalRuneType, ItemRunes } from './data/Runes';
+import { FilterType, AppFilter, spellSchoolFilters, spellLevelFilters, spellTraditionFilters, spellRarityFilters } from './Filters';
+import { consumableSources } from './source/Consumable';
+import { GenType, DataSource, isTableSource, isPackSource, isPoolSource } from './source/DataSource';
+import { permanentSources } from './source/Permanent';
+import { spellSources, SpellItemType, wandTemplateIds, TEMPLATE_PACK_ID, scrollTemplateIds } from './source/Spells';
+import { treasureSources, TreasureSource, isTreasureSource } from './source/Treasure';
+import { SystemData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/packages.mjs';
+
 
 /**
  * Returns distinct elements of an array when used to filter an array.
@@ -469,7 +452,7 @@ export function parsePrice(price: PriceString): number {
         pp: 10,
     };
 
-    const matches = price.toLowerCase().match(/([0-9]+)(.*)(cp|sp|gp|pp)/);
+    const matches = price.toString().toLowerCase().match(/([0-9]+)(.*)(cp|sp|gp|pp)/);
     if (matches === null) {
         return 0;
     }
@@ -559,12 +542,12 @@ export function calculateFinalPriceAndLevel(args: FinalPriceAndLevelArgs): Final
             brokenThreshold: 0,
         };
     }
-
-    let finalLevel = args.item.data.level.value;
+    
+    let finalLevel = parseInt(args.item.data.level.value.toString());
     let finalPrice = parsePrice(args.item.data.price.value);
-    let finalHardness = args.item.data.hardness.value;
+    let finalHardness = parseInt(args.item.data.hardness.toString());
     let finalHitPoints = args.item.data.hp.value;
-    let finalBreakThreshold = args.item.data.brokenThreshold.value;
+    let finalBreakThreshold = args.item.data.hp.brokenThreshold;
 
     const materialData = ItemMaterials[args.materialType][equipmentType]?.[args.materialGradeType];
     if (materialData) {
@@ -578,7 +561,7 @@ export function calculateFinalPriceAndLevel(args: FinalPriceAndLevelArgs): Final
             finalBreakThreshold = materialData.durability.brokenThreshold;
         }
     }
-
+    
     const potencyRuneData = ItemRunes[equipmentType]['potency']?.[args.potencyRune];
     if (potencyRuneData) {
         finalLevel = Math.max(finalLevel, potencyRuneData.level);

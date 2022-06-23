@@ -256,10 +256,9 @@ export interface PhysicalItem extends PF2EItem {
     data: PhysicalItemData;
 }
 export interface PhysicalItemData extends PF2EItemData {
-    hp: IValue<number>;
+    hp: PhysicalItemHPData;
     maxHp: IValue<number>;
-    hardness: IValue<number>;
-    brokenThreshold: IValue<number>;
+    hardness: number;
 
     price: IValue<PriceString>;
     weight: IValue<WeightString>;
@@ -273,6 +272,12 @@ export interface PhysicalItemData extends PF2EItemData {
 
     preciousMaterial: IValue<PreciousMaterialType>;
     preciousMaterialGrade: IValue<PreciousMaterialGrade>;
+}
+export interface PhysicalItemHPData
+{
+    brokenThreshold: number;
+    value: number;
+    max: number;
 }
 const physicalCheckProperties = ['hp', 'maxHp', 'price', 'weight'];
 export function isPhysicalItem(item: PF2EItem | undefined): item is PhysicalItem {
@@ -326,7 +331,10 @@ export interface EquipmentItemData extends PhysicalItemData {
     propertyRune2: IValue<WeaponPropertyRuneType | ArmorPropertyRuneType>;
     propertyRune3: IValue<WeaponPropertyRuneType | ArmorPropertyRuneType>;
     propertyRune4: IValue<WeaponPropertyRuneType | ArmorPropertyRuneType>;
+    hardness: number;
+    brokenThreshold: IValue<number>;
 }
+
 const equipmentCheckProperties = ['equippedBulk', 'propertyRune1', 'propertyRune2'];
 export function isEquipment(item: PF2EItem | undefined): item is EquipmentItem {
     if (item === undefined) return false;

@@ -147,7 +147,7 @@ export const extendLootSheet = () => {
         protected set createBaseItem(value: EquipmentItem | undefined) {
             // delete local old base item to prevent memory leak
             if (this.createBaseItem !== undefined && this.createBaseItem !== null) {
-                getGame().items?.delete(this.createBaseItem._id);
+                game.items?.delete(this.createBaseItem._id);
             }
 
             value = duplicate(value) as EquipmentItem;
@@ -232,8 +232,8 @@ export const extendLootSheet = () => {
 
             const { price, level, hardness, hitPoints, brokenThreshold } = calculateFinalPriceAndLevel({
                 item: this.createBaseItem,
-                materialType,
-                materialGradeType,
+                materialType: this.createBaseItem.data.preciousMaterial.value,
+                materialGradeType: this.createBaseItem.data.preciousMaterialGrade.value,
                 potencyRune: potencyRuneType,
                 fundamentalRune: fundamentalRune,
                 propertyRunes: propertyRunes,
@@ -288,14 +288,14 @@ export const extendLootSheet = () => {
                 newName = `+${data.potencyRune}`;
             }
             if (data.strikingRune && (data.strikingRune as string) !== '') {
-                newName += ` ${getGame().i18n.localize(CONFIG.PF2E.weaponStrikingRunes[data.strikingRune])}`;
+                newName += ` ${game.i18n.localize(CONFIG.PF2E.weaponStrikingRunes[data.strikingRune])}`;
             }
             if (data.resiliencyRune && (data.resiliencyRune as string) !== '') {
-                newName += ` ${getGame().i18n.localize(CONFIG.PF2E.armorResiliencyRunes[data.resiliencyRune])}`;
+                newName += ` ${game.i18n.localize(CONFIG.PF2E.armorResiliencyRunes[data.resiliencyRune])}`;
             }
 
             if (data.preciousMaterial && (data.preciousMaterial as string) !== '') {
-                newName += ` ${getGame().i18n.localize(CONFIG.PF2E.preciousMaterials[data.preciousMaterial])}`;
+                newName += ` ${game.i18n.localize(CONFIG.PF2E.preciousMaterials[data.preciousMaterial])}`;
             }
 
             if (isWeapon(product)) {
@@ -303,7 +303,7 @@ export const extendLootSheet = () => {
                     const key = `propertyRune${i}` as PropertyRuneCreateKey;
                     const value = data[key] as WeaponPropertyRuneType;
                     if (value && (value as string) !== '') {
-                        newName += ` ${getGame().i18n.localize(CONFIG.PF2E.weaponPropertyRunes[value])}`;
+                        newName += ` ${game.i18n.localize(CONFIG.PF2E.weaponPropertyRunes[value])}`;
                     }
                 }
             }
@@ -312,15 +312,20 @@ export const extendLootSheet = () => {
                     const key = `propertyRune${i}` as PropertyRuneCreateKey;
                     const value = data[key] as ArmorPropertyRuneType;
                     if (value && (value as string) !== '') {
-                        newName += ` ${getGame().i18n.localize(CONFIG.PF2E.armorPropertyRunes[value])}`;
+                        newName += ` ${game.i18n.localize(CONFIG.PF2E.armorPropertyRunes[value])}`;
                     }
                 }
             }
 
-            product.data.hardness.value = data.hardness;
+            console.log("Data object");
+            console.log(data);
+            console.log("Product object");
+            console.log(product);
+
+            product.data.hardness = data.hardness;
             product.data.hp.value = data.hitPoints;
-            product.data.maxHp.value = data.hitPoints;
-            product.data.brokenThreshold.value = data.brokenThreshold;
+            product.data.hp.max = data.hitPoints;
+            product.data.hp.brokenThreshold = data.brokenThreshold;
 
             // update table description of shields
             if (isShield(product)) {
@@ -628,7 +633,7 @@ export const extendLootSheet = () => {
 
                 const promises: Promise<Item[]>[] = [];
                 for (const source of Object.values(spellSources)) {
-                    const pack = getGame().packs.get(source.id);
+                    const pack = game.packs.get(source.id);
                     if (pack === undefined) {
                         continue;
                     }
@@ -778,10 +783,3 @@ export const extendLootSheet = () => {
     }
     return LootApp;
 };
-
-function getGame(): Game {
-    if(!(game instanceof Game)) {
-      throw new Error('game is not initialized yet!');
-    }
-    return game;
-  }
