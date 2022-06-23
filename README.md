@@ -12,4 +12,3 @@ This module was originally part of *PF2e Toolbox*, however it is now separate fo
 - Create weapons, armor, **and shields** with the item creator
   - Calculates all relevant statistics for the item, such as hp, hardness, price, level, etc...
   - **Drop a template to quickly set the creator to settings matching the template**
-test
