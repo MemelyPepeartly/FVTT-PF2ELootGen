@@ -53,8 +53,8 @@ export interface TableSource extends DataSource {
 export function isTableSource(source: DataSource): source is TableSource {
     return source.sourceType === SourceType.Table;
 }
-export async function getTableSourceTable(source: TableSource): Promise<RollTable> {
-    return await getFromPackSource(source.tableSource, source.id);
+export function getTableSourceTable(source: TableSource) {
+    return getFromPackSource(source.tableSource, source.id);
 }
 
 export interface PackSource extends DataSource {
@@ -68,13 +68,15 @@ export function isPackSource(source: DataSource): source is PackSource {
 export function getPack(source: PackSource) {
     return getGame().packs.get(source.id);
 }
-export async function getFromPackSource<TResult = PF2EItem>(source: PackSource, documentId: string): Promise<TResult> {
+export function getFromPackSource<TResult = PF2EItem>(source: PackSource, documentId: string) {
     const pack = getGame().packs.get(source.id);
-    return await pack.getDocument(documentId);
+    console.log("getFromPackSource running");
+    return pack?.getDocument(documentId);
 }
-export async function getPackSourceContents(source: PackSource): Promise<PF2EItem[]> {
+export function getPackSourceContents(source: PackSource) {
     const pack = getGame().packs.get(source.id);
-    return await pack.getDocuments();
+    console.log("getPackSourceContents running");
+    return pack?.getDocuments();
 }
 
 export interface PoolSource extends DataSource {

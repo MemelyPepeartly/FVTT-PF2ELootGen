@@ -41,12 +41,13 @@ import {
 } from '../../types/PF2E';
 import { isWeaponArmorData, ItemMaterials } from './data/Materials';
 import { FundamentalRuneType, ItemRunes, PotencyRuneType } from './data/Runes';
-import { DocumentClassForCompendiumMetadata } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/foundry.js/collections/documentCollections/compendiumCollection';
 import { MODULE_NAME, QUICK_MYSTIFY, TOOLBOX_NAME } from '../Constants';
 import { ChatMessageDataConstructorData } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/chatMessageData';
-import { DiceRollMode } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/constants.mjs';
+//import { DiceRollMode } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/constants.mjs';
 import ModuleSettings from '../../../FVTT-Common/src/module/ModuleSettings';
 import { FEATURE_OUTPUT_LOOT_ROLLS, FEATURE_OUTPUT_LOOT_ROLLS_WHISPER } from '../Setup';
+import { DocumentClassForCompendiumMetadata } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client/data/collections/compendium';
+import { DICE_ROLL_MODES } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/constants.mjs';
 
 /**
  * Returns distinct elements of an array when used to filter an array.
@@ -307,7 +308,7 @@ export async function maybeOutputItemsToChat(results: PhysicalItem[]) {
 
     const rollModeArgs: Partial<ChatMessageDataConstructorData> = {};
     const gmIds = game.users!.filter((user) => user.isGM).map((user) => user.id!);
-    let rollMode = game.settings.get('core', 'rollMode') as DiceRollMode;
+    let rollMode = game.settings.get('core', 'rollMode') as DICE_ROLL_MODES;
     if (ModuleSettings.instance.get<boolean>(FEATURE_OUTPUT_LOOT_ROLLS_WHISPER)) {
         rollMode = 'gmroll';
     }
@@ -317,7 +318,7 @@ export async function maybeOutputItemsToChat(results: PhysicalItem[]) {
             rollModeArgs.blind = true;
             rollModeArgs.whisper = gmIds;
             break;
-        case 'roll':
+        case 'publicroll':
             break;
         case 'selfroll':
             rollModeArgs.whisper = [game.user?.id!];
