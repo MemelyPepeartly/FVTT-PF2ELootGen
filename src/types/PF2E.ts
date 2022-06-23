@@ -232,6 +232,7 @@ export interface PF2EItemData {
     level: IValue<number>;
     description: IValue<string>;
     source: IValue<string>;
+    category: string;
     price: PF2EPriceValueData;
     traits: IValue<Array<string>> & {
         rarity: IValue<Rarity>;
@@ -418,5 +419,5 @@ export interface Shield extends BaseArmor {
 export interface ShieldData extends BaseArmorData {}
 export function isShield(item: PF2EItem | undefined): item is Shield {
     if (item === undefined) return false;
-    return isArmor(item) && item.data.armorType.value === 'shield';
+    return isArmor(item) && item.data.category === 'shield';
 }

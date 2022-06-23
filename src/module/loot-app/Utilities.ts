@@ -542,7 +542,6 @@ export function calculateFinalPriceAndLevel(args: FinalPriceAndLevelArgs): Final
             brokenThreshold: 0,
         };
     }
-    
     let finalLevel = parseInt(args.item.data.level.value.toString());
     /**
      * // TODO: This just goes by gold value for now. Making it parse down to a string causes the weapon to not be openable or a 
@@ -552,7 +551,7 @@ export function calculateFinalPriceAndLevel(args: FinalPriceAndLevelArgs): Final
     let finalHardness = parseInt(args.item.data.hardness.toString());
     let finalHitPoints = args.item.data.hp.value;
     let finalBreakThreshold = args.item.data.hp.brokenThreshold;
-
+    
     const materialData = ItemMaterials[args.materialType][equipmentType]?.[args.materialGradeType];
     if (materialData) {
         finalLevel = Math.max(finalLevel, materialData.level);

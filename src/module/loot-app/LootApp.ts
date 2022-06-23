@@ -171,7 +171,7 @@ export const extendLootSheet = () => {
         protected async getCreateData() {
             if (this.createBaseItem === undefined) {
                 return {};
-            }
+            }      
             const equipmentType = getEquipmentType(this.createBaseItem);
             if (equipmentType === undefined) {
                 return {};
@@ -226,14 +226,14 @@ export const extendLootSheet = () => {
                     });
                     break;
             }
-
+            
             const dataUpdates = this.validateFlagData(this.createBaseItem);
             data = mergeObject(data, dataUpdates);
-
+            
             const { price, level, hardness, hitPoints, brokenThreshold } = calculateFinalPriceAndLevel({
                 item: this.createBaseItem,
-                materialType: this.createBaseItem.data.preciousMaterial.value,
-                materialGradeType: this.createBaseItem.data.preciousMaterialGrade.value,
+                materialType: materialType,
+                materialGradeType: materialGradeType,
                 potencyRune: potencyRuneType,
                 fundamentalRune: fundamentalRune,
                 propertyRunes: propertyRunes,
