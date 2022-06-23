@@ -1,16 +1,16 @@
 name: Release Module
 # For releases
 on:
-    push:
-        branches:
-            - master
+  push:
+    # Sequence of patterns matched against refs/tags
     tags:
       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
 jobs:
-  build:
-    name: Release
-    runs-on: ubuntu-latest
-    steps:
+    build:
+        name: Release
+        runs-on: ubuntu-latest
+        steps:
       - name: Get Version
         id: get_version
         run: |
@@ -31,7 +31,7 @@ jobs:
       - name: Update module.json
         run: |
           sed -i '/"version":/c\    "version": "${{ steps.get_version.outputs.VERSION2 }}",' module.json
-          sed -i '/"download":/c\    "download": "https://github.com/Djphoenix719/FVTT-PF2ELootGen/releases/download/${{ steps.get_version.outputs.VERSION }}/pf2e-lootgen-${{ steps.get_version.outputs.VERSION }}.zip",' module.json
+          sed -i '/"download":/c\    "download": "https://github.com/MemelyPepeartly/FVTT-PF2ELootGen/releases/download/${{ steps.get_version.outputs.VERSION }}/pf2e-lootgen-${{ steps.get_version.outputs.VERSION }}.zip",' module.json
           cat module.json
 
       - name: Install dependencies
