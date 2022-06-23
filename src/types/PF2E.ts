@@ -232,11 +232,11 @@ export interface PF2EItemData {
     level: IValue<number>;
     description: IValue<string>;
     source: IValue<string>;
+    price: PF2EPriceValueData;
     traits: IValue<Array<string>> & {
         rarity: IValue<Rarity>;
     };
 }
-
 export interface SpellItem extends PF2EItem {
     type: 'spell';
     data: SpellData;
@@ -260,7 +260,7 @@ export interface PhysicalItemData extends PF2EItemData {
     maxHp: IValue<number>;
     hardness: number;
 
-    price: IValue<PriceString>;
+    price: PF2EPriceValueData;
     weight: IValue<WeightString>;
 
     quantity: IValue<number>;
@@ -272,6 +272,22 @@ export interface PhysicalItemData extends PF2EItemData {
 
     preciousMaterial: IValue<PreciousMaterialType>;
     preciousMaterialGrade: IValue<PreciousMaterialGrade>;
+}
+/**
+ * Prices in 2e have a value object with arguments for pp, gp, sp, and cp gold amounts. 
+ * @param value.pp
+ * @param value.gp
+ * @param value.sp
+ * @param value.cp
+ */
+export interface PF2EPriceValueData
+{
+    value: {
+        pp: number,
+        gp: number,
+        sp: number,
+        cp: number
+    }
 }
 export interface PhysicalItemHPData
 {
