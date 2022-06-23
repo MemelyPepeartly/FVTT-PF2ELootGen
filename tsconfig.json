@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
-    "types": ["@league-of-foundry-developers/foundry-vtt-types"],
+    "types": [
+      "@league-of-foundry-developers/foundry-vtt-types",
+      "handlebars"
+    ],
     "moduleResolution": "node",
     "strictNullChecks": true,
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
@@ -69,6 +72,8 @@
     // "declarationDir": "./",                           /* Specify the output directory for generated declaration files. */
     // "preserveValueImports": true,                     /* Preserve unused imported values in the JavaScript output that would otherwise be removed. */
 
+    "outDir": "dist",
+    
     /* Interop Constraints */
     // "isolatedModules": true,                          /* Ensure that each file can be safely transpiled without relying on other imports. */
     // "allowSyntheticDefaultImports": true,             /* Allow 'import x from y' when a module doesn't have a default export. */
