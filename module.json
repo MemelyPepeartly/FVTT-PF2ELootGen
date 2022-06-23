@@ -2,7 +2,7 @@
     "name": "pf2e-lootgen",
     "title": "PF2e Loot Generator",
     "description": "A loot generator/utility for the PF2E system in Foundry VTT. May eventually become system agnostic.",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "author": "Andrew Cuccinello [DJ#1982]",
     "packs": [],
     "esmodules": ["./bundle.js"],
