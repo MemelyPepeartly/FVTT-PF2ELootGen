@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { IEnabled, IWeighted } from './Mixins';
-import { PF2EItem } from '../../../types/PF2E';
+import { PF2EItem } from "../../../types/PF2E";
+import { IWeighted, IEnabled } from "./Mixins";
 
 export enum SourceType {
     Table = 'table',
@@ -66,16 +66,14 @@ export function isPackSource(source: DataSource): source is PackSource {
     return source.sourceType === SourceType.Pack;
 }
 export function getPack(source: PackSource) {
-    return game.packs.get(source.id);
+    return getGame().packs.get(source.id);
 }
 export async function getFromPackSource<TResult = PF2EItem>(source: PackSource, documentId: string): Promise<TResult> {
-    const pack = game.packs.get(source.id);
-    // @ts-ignore
+    const pack = getGame().packs.get(source.id);
     return await pack.getDocument(documentId);
 }
 export async function getPackSourceContents(source: PackSource): Promise<PF2EItem[]> {
-    const pack = game.packs.get(source.id);
-    // @ts-ignore
+    const pack = getGame().packs.get(source.id);
     return await pack.getDocuments();
 }
 
@@ -103,3 +101,10 @@ export function ordinalNumber(n: number): string {
     const ordinal = suffixes[(index - 20) % 10] || suffixes[index] || suffixes[0];
     return `${n}${ordinal}`;
 }
+
+function getGame(): Game {
+    if(!(game instanceof Game)) {
+      throw new Error('game is not initialized yet!');
+    }
+    return game;
+  }

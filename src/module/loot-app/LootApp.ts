@@ -147,7 +147,7 @@ export const extendLootSheet = () => {
         protected set createBaseItem(value: EquipmentItem | undefined) {
             // delete local old base item to prevent memory leak
             if (this.createBaseItem !== undefined && this.createBaseItem !== null) {
-                game.items?.delete(this.createBaseItem._id);
+                getGame().items?.delete(this.createBaseItem._id);
             }
 
             value = duplicate(value) as EquipmentItem;
@@ -288,14 +288,14 @@ export const extendLootSheet = () => {
                 newName = `+${data.potencyRune}`;
             }
             if (data.strikingRune && (data.strikingRune as string) !== '') {
-                newName += ` ${game.i18n.localize(CONFIG.PF2E.weaponStrikingRunes[data.strikingRune])}`;
+                newName += ` ${getGame().i18n.localize(CONFIG.PF2E.weaponStrikingRunes[data.strikingRune])}`;
             }
             if (data.resiliencyRune && (data.resiliencyRune as string) !== '') {
-                newName += ` ${game.i18n.localize(CONFIG.PF2E.armorResiliencyRunes[data.resiliencyRune])}`;
+                newName += ` ${getGame().i18n.localize(CONFIG.PF2E.armorResiliencyRunes[data.resiliencyRune])}`;
             }
 
             if (data.preciousMaterial && (data.preciousMaterial as string) !== '') {
-                newName += ` ${game.i18n.localize(CONFIG.PF2E.preciousMaterials[data.preciousMaterial])}`;
+                newName += ` ${getGame().i18n.localize(CONFIG.PF2E.preciousMaterials[data.preciousMaterial])}`;
             }
 
             if (isWeapon(product)) {
@@ -303,7 +303,7 @@ export const extendLootSheet = () => {
                     const key = `propertyRune${i}` as PropertyRuneCreateKey;
                     const value = data[key] as WeaponPropertyRuneType;
                     if (value && (value as string) !== '') {
-                        newName += ` ${game.i18n.localize(CONFIG.PF2E.weaponPropertyRunes[value])}`;
+                        newName += ` ${getGame().i18n.localize(CONFIG.PF2E.weaponPropertyRunes[value])}`;
                     }
                 }
             }
@@ -312,7 +312,7 @@ export const extendLootSheet = () => {
                     const key = `propertyRune${i}` as PropertyRuneCreateKey;
                     const value = data[key] as ArmorPropertyRuneType;
                     if (value && (value as string) !== '') {
-                        newName += ` ${game.i18n.localize(CONFIG.PF2E.armorPropertyRunes[value])}`;
+                        newName += ` ${getGame().i18n.localize(CONFIG.PF2E.armorPropertyRunes[value])}`;
                     }
                 }
             }
@@ -628,7 +628,7 @@ export const extendLootSheet = () => {
 
                 const promises: Promise<Item[]>[] = [];
                 for (const source of Object.values(spellSources)) {
-                    const pack = game.packs.get(source.id);
+                    const pack = getGame().packs.get(source.id);
                     if (pack === undefined) {
                         continue;
                     }
@@ -778,3 +778,10 @@ export const extendLootSheet = () => {
     }
     return LootApp;
 };
+
+function getGame(): Game {
+    if(!(game instanceof Game)) {
+      throw new Error('game is not initialized yet!');
+    }
+    return game;
+  }
