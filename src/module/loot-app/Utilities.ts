@@ -441,7 +441,9 @@ export function mergeItem(a: PhysicalItem, b: PhysicalItem) {
 }
 
 /**
- * Parse a price ending in {cp|sp|gp|pp} to gp
+ * Parse a price ending in {cp|sp|gp|pp} to gp 
+ * 
+ * // TODO: Need to refactor this to use the new value type associated with currency on the generic data item object
  * @param price
  */
 export function parsePrice(price: PriceString): number {
